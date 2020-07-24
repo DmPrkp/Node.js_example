@@ -1,0 +1,23 @@
+.main {
+    background-color: darkblue;
+    min-height: 50px; 
+    display: flex;
+    justify-content: center;
+    color: floralwhite;     
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    margin: 0px;
+}
+
+.logo {
+    width: 50px;
+}
+
+.w-all {
+    width: 100%;
+}
