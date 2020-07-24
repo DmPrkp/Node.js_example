@@ -1,12 +1,12 @@
 // Task 1///////////////////////////////////////////////////////////
-function customSetTimeout(func, sec) {
-	let currentDate = new Date().getTime() + (sec * 1000)
+function customSetTimeout(func, sec) {	
 	return function f() {
-		if (currentDate <= new Date().getTime()) {
-			return func
-		} else {
-
+		let currentDate = new Date().getTime() + (sec * 1000)
+		let New = new Date().getTime();
+		while (currentDate > New) {
+			New = new Date().getTime();
 		}
+		return func();
 	};
 }
 
@@ -15,12 +15,13 @@ function func1() {
 };
 
 let paused = customSetTimeout(func1, 2);
+paused()
 
 //paused();
 
 // Task 2///////////////////////////////////////////////////////////
 
-function func1() {
+function func2() {
 	return [1, 2]
 }
 
@@ -36,16 +37,16 @@ function return_object(func, ...arg) {
 	}
 }
 
-let func_decoreted = return_object(func1, 'one', 'two');
+let func_decoreted = return_object(func2, 'one', 'two');
 let r = func_decoreted();
 
 console.log(r.one);
 console.log(r.two);
 
-function func2() {
+function func3() {
 	return ['JS', 'is', 'programming language']
 }
 
-let d = return_object(func2, 'a', 'b', 'c')();
+let d = return_object(func3, 'a', 'b', 'c')();
 console.log(d.c)
 
