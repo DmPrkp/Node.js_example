@@ -1,12 +1,12 @@
 // Task 1///////////////////////////////////////////////////////////
 function customSetTimeout(func, sec) {	
-	return function f() {
+	return function f(n) {
 		let currentDate = new Date().getTime() + (sec * 1000)
 		let New = new Date().getTime();
 		while (currentDate > New) {
 			New = new Date().getTime();
 		}
-		return func();
+		return func(n);
 	};
 }
 
@@ -14,10 +14,13 @@ function func1() {
 	console.log('Функция выполниться с задержкой в 2 секунд!');
 };
 
-let paused = customSetTimeout(func1, 2);
-paused()
+function func11(name) {
+	console.log(name +'с задержкой в 2 секунды!');
+};
 
-//paused();
+let paused = customSetTimeout(func11, 2);
+
+paused("petr");
 
 // Task 2///////////////////////////////////////////////////////////
 
