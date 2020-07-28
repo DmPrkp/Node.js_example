@@ -64,6 +64,10 @@ fs.readFile(data2, 'utf8', (err, data) => {
 
 // Task 3 ///////////////////////////////////////////////////////////
 
+const EventEmitter = require('events');
+
+class MyEmitter extends EventEmitter {}
+
 const eventName = new MyEmitter();
 
 eventName.on('eat', stringData => {
