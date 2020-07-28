@@ -2,11 +2,11 @@
 
 function* makeGenerator() {
 	const simbols = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890"
-	
+
 	while (true) {
-	let i = Math.floor(Math.random() * simbols.length)
-	yield simbols[i];
-	};	
+		let i = Math.floor(Math.random() * simbols.length)
+		yield simbols[i];
+	};
 }
 const simbolGen = makeGenerator()
 
@@ -39,25 +39,50 @@ fs.readFile(data2, 'utf8', (err, data) => {
 		response.end();
 	} else {
 		let dataToArray = data.split(" ");
-		
-		let stringMultOf2 = dataToArray.map((num)=>{
-			 if (num%2 === 0) {
+
+		let stringMultOf2 = dataToArray.map((num) => {
+			if (num % 2 === 0) {
 				return num
 			};
 		}).join(" ");
 		console.log(`${stringMultOf2} -numbers multiple of 2`);
-		
-		let stringOfCub = dataToArray.map((num)=>{return Math.pow(num, 3)}).join(" ");
+
+		let stringOfCub = dataToArray.map((num) => { return Math.pow(num, 3) }).join(" ");
 		console.log(`${stringOfCub} -numbers of 3`);
 
 		fs.writeFile("out-1.txt", stringMultOf2, (err) => {
 			if (err) throw err;
 			console.log(`out-1.txt has been saved!`);
-		  });
+		});
 
 		fs.writeFile("out-2.txt", stringOfCub, (err) => {
 			if (err) throw err;
 			console.log(`out-2.txt has been saved!`);
-		  });
+		});
 	}
 });
+
+// Task 3 ///////////////////////////////////////////////////////////
+
+const eventName = new MyEmitter();
+
+eventName.on('eat', stringData => {
+	console.log('Первым: Я кушаю  ' + stringData + '.');
+	console.log('Вторым: Я кушаю  ' + stringData + '.');
+});
+
+function emit() {
+	setTimeout(() => {
+		eventName.emit('eat', 'бутерброд');
+	}, 3000);
+
+	setTimeout(() => {
+		eventName.emit('eat', 'мясо');
+	}, 2000);
+
+	setTimeout(() => {
+		eventName.emit('eat', 'яблочко');
+	}, 500);	
+}
+
+emit();
