@@ -103,7 +103,7 @@ http.createServer((req, res)=> {
                     res.writeHead(200, type.json);                    
                     let items = JSON.parse(data);
                     let firstItems = [];
-                    for (let i=3; i<items.length; i++) {
+                    for (let i=4; i<items.length; i++) {
                         firstItems.push(items[i])
                     }                    
                     let firstItemsStr = JSON.stringify(firstItems);                    
