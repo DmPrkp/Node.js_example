@@ -5,7 +5,8 @@ const fs = require('fs');
 const type = {
 	html: {"Content-Type" : "text/html"},
 	js: {"Content-Type" : "text/javascript"},
-	plain: {"Content-Type" : "text/plain"}
+    plain: {"Content-Type" : "text/plain"},
+    json: {'Content-Type': 'application/json'},
 }
 
 const html = `
@@ -19,33 +20,34 @@ const html = `
 	<body>
 		<div><H1>Hello Node</H1></div>
 		<div>
-			<h2>Content</h2>
+			<h2>Users</h2>
 			<p id="container">text</p>
-			<button id="button">AJAX</button>
+			<button id="button">JSON</button>
 		</div>
 		<script src='script.js'></script>
 	</body>
 </html>
 `
-
 const jsfile = `
 let paragraph = document.querySelector("#container");
 let button = document.querySelector("#button");
+
 button.addEventListener("click", ()=>{
 		let xhr = new XMLHttpRequest();
-		xhr.open('GET', 'content.html', false)
+		xhr.open('GET', 'users.json', false)
 		xhr.send();
-		if (xhr.status!=200) {			
+		if (xhr.status!=200) {
 			console.log( xhr.status + ': ' + xhr.statusText + "there is no file here!")
 		} else {
-			let text = xhr.responseText;			
-			paragraph.innerText = text;
-		}
-	})
+			let users = xhr.responseText;
+			let user = JSON.parse(users);
+			let userUL = "<ul><li>"+user.join('</li><li>')+"</li></ul>";        
+        	paragraph.innerHTML = userUL;
+		}         
+    })
 `
 
-const content = ` New text by Ajax!!`
-
+//let usersJSON = '["Vasili", "Petr", "Sergey"]'
 
 http.createServer((req, res)=> {
 	switch (req.url) {
@@ -57,14 +59,22 @@ http.createServer((req, res)=> {
 			res.writeHead(200, type.js);	
 			res.end(jsfile); 
 		break
-		case '/content.html': 
-			res.writeHead(200, type.plain);	
-			res.end(content); 
+		case '/users.json': 
+			fs.readFile('users.json', 'utf8', (err, data)=>{
+                if (err) {
+					console.log("there is no file here!")
+                    res.writeHead(404); 
+			        res.end(); 
+                } else {					
+                    res.writeHead(200, type.json);
+					res.end(data);					
+                }
+           })
 		break
 		default: 
 			res.writeHead(404); 
 			res.end(); 
 		break
-	}	
-}).listen(8080, ()=> console.log("server works"))
+	}
+}).listen(8080, ()=> console.log("The server is works!"))
 
