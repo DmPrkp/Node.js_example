@@ -22,20 +22,6 @@ http.createServer((req, res) => {
     mimeType = mimeTypes[extname];
 
     if (extname === '.mp4') {
-        fs.readFile(pathname, (err, data) => {
-            if (err) {
-                console.log('Could not find or open file for reading\n');
-                res.statusCode = 404;
-                res.end();
-            } else {
-                console.log(`The file ${pathname} is read and sent to the client\n`);
-                res.writeHead(200, {
-                    'Content-Type': mimeType
-                });
-                res.end(data);
-            }
-        });
-    } else if (extname === ".jpg" || extname === ".gif") {
         if (!fs.existsSync(pathname)) {
             console.log('there is no file here!\n');
             res.statusCode = 404;
@@ -44,7 +30,7 @@ http.createServer((req, res) => {
         }
 
         let responseHeaders = {};
-        let stat = fs.statSync(pathname);
+        let stat = fs.statSync(pathname);        
         let rangeRequest = readRangeHeader(req.headers['range'], stat.size);
 
         if (rangeRequest == null) {
@@ -74,6 +60,7 @@ http.createServer((req, res) => {
         if (end - start >= maxsize) { end = start + maxsize - 1; }
 
         responseHeaders['Content-Range'] = 'bytes' + start + '-' + end + '/' + stat.size;
+        responseHeaders['Content-Length'] = start == end ? 0 : (end - start + 1);
         responseHeaders['Content-Type'] = mimeType;
         responseHeaders['Accept-Ranges'] = 'bytes';
         responseHeaders['Cache-Control'] = 'no-cache';
@@ -82,28 +69,29 @@ http.createServer((req, res) => {
 
         let buf = Buffer.alloc(responseHeaders['Content-Length']);
 
-        fs.read(fd, bud, 0, buf.length, start, (err, bytes) => {
+        fs.read(fd, buf, 0, buf.length, start, (err, bytes) => {
             if (err) {
                 console.log(err);
                 res.statusCode = 500;
                 res.end();
             } else {
                 res.writeHead(206, responseHeaders);
+                console.log(buf)
                 res.end(buf);
             }
         });
     } else {
         fs.readFile(pathname, 'utf8', (err, data) => {
             if (err) {
-            console.log('Could not find or open file for reading\n');
-            res.statusCode = 404;
-            res.end();
+                console.log('Could not find or open file for reading\n');
+                res.statusCode = 404;
+                res.end();
             } else {
-            console.log(`The file ${pathname} is read and sent to the client\n`);
-            res.writeHead(200, {
-            'Content-Type':mimeType
-            });
-            res.end(data);
+                console.log(`The file ${pathname} is read and sent to the client\n`);
+                res.writeHead(200, {
+                    'Content-Type': mimeType
+                });
+                res.end(data);
             }
         });
     }
