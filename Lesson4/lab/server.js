@@ -59,7 +59,10 @@ http.createServer((req, res) => {
         if (end - start >= maxsize) { end = start + maxsize - 1; }
 
         responseHeaders['Content-Range'] = 'bytes ' + start + '-' + end + '/' + stat.size;
+<<<<<<< HEAD
         responseHeaders['Content-Length'] = start == end ? 0 : (end - start + 1);
+=======
+>>>>>>> 483bab22abbc30fb56bc51ff79f7873f3c1bd158
         responseHeaders['Content-Type'] = mimeType;
         responseHeaders['Accept-Ranges'] = 'bytes';
         responseHeaders['Cache-Control'] = 'no-cache';
@@ -96,19 +99,3 @@ http.createServer((req, res) => {
 }).listen(8080, () => {
     console.log("It's works \n");
 });
-
-function readRangeHeader(range, totalLength) {
-    if (range == null || range.length == 0) return null;
-    let array = range.split(/bytes=([0-9]*)-([0-9]*)/);
-    let startRange = parseInt(array[1]);
-    let endRange = parseInt(array[2]);
-    let result = {
-        start: isNaN(startRange) ? 0 : startRange,
-        end: isNaN(endRange) ? (totalLength - 1) : endRange
-    };
-    if (isNaN(startRange) && !isNaN(endRange)) {
-        result.start = totalLength - endRange;
-        result.end = totalLength - 1;
-    }
-    return result;
-}
