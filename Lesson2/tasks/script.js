@@ -27,6 +27,30 @@ let newPassword = iteraGenerator(16)
 
 console.log(newPassword)
 
+////Autors code////////////////////////////////////////////////////////////////
+
+function rand(max, min){
+	return Math.floor(Math.random() * (max - min) + min);
+}
+
+function* password_generator(length){
+	let num = true;
+	while(num){
+		let password = "";
+		for(let i = 0; i < length; i++){
+			password += String.fromCharCode(rand(48, 122));
+		}
+		num = yield password;
+		console.log(num);
+	}
+}
+
+let gen_pas = password_generator(16);
+
+console.log(gen_pas.next(true).value); //пароль
+console.log(gen_pas.next(true).value); //пароль
+console.log(gen_pas.next(false));
+
 // Task 2///////////////////////////////////////////////////////////
 
 let data2 = "data.txt";
