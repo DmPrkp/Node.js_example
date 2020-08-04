@@ -1,10 +1,13 @@
 const http = require ('http');
+let url = process.argv[2];
+let body = "";
 
-
-console.clear()
-http.get(process.argv[2], (res)=>{
-    res.setEncoding('utf8');
-    res.on('data', function(data) {
-        console.log(data)
+http.get(url, (res)=>{
+    res.on('data', (chunk)=>{
+        body+=chunk
+    })
+    res.on('end', ()=>{
+        console.log(body.length)
+        console.log(body)
     })
 })
